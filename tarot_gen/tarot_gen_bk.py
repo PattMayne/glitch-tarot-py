@@ -5,14 +5,11 @@ import os
 import io
 import random
 
-SYMBOL_DIVISOR = 6
-MAX_SYMBOLS = SYMBOL_DIVISOR - 1
-
 def say_hi(name):
     return_string = "Hi, " + name + "!"
     return return_string
 
-# TO DO: pick a what?
+# TO DO: pick a 
 
 def get_bg():
     file_names = [
@@ -48,28 +45,16 @@ def get_symbol():
 #   to get a list of rows and row lengths
 #  and display the symbols with some elegance
 def get_row_sizes(magnitude):
-    list_of_row_sizes = [];
-
-    # if the magnitude is small enough, we only need one row
+    list_of_row_sizes = [1];
     if magnitude < 3:
-        list_of_row_sizes.append(1)
         return list_of_row_sizes
 
-    # remove ONE from magnitude
-    # Because this one will be the BOTTOM row
-    # (it is solo and will eventually be part of a modular creature)
-
-    magnitude = magnitude - 1
-
-    # always add the max number allowed
     unassigned_spaces = magnitude + 0
     while unassigned_spaces > 0:
-        spaces_this_row = MAX_SYMBOLS if unassigned_spaces >= MAX_SYMBOLS else unassigned_spaces
+        max_spaces = 5 if unassigned_spaces > 4 else unassigned_spaces
+        spaces_this_row = random.randrange(1, max_spaces)
         list_of_row_sizes.append(spaces_this_row)
         unassigned_spaces = unassigned_spaces - spaces_this_row
-
-    # adding that 1 back on
-    list_of_row_sizes.append(1)
 
     return list_of_row_sizes
 
@@ -85,30 +70,12 @@ def get_img():
     magnitude = random.randrange(1, 12)
     img_size = bg_img.size
     bg_width, bg_height = img_size
-    symbol_width = int(bg_width / SYMBOL_DIVISOR)
+    symbol_width = int(bg_width / 5)
     symbol_img = symbol_img.resize((symbol_width, symbol_width))
-    print(magnitude)
-
+    
     draw_y = 25
     spaces = 0
-    y_symbol_index = 0
-
-    list_of_row_sizes = get_row_sizes(magnitude)
-
-    for symbols_in_this_row in list_of_row_sizes:
-        print(symbols_in_this_row)
-
-        offset = (SYMBOL_DIVISOR - symbols_in_this_row) * symbol_width / 2
-
-        for symbol_index in range(symbols_in_this_row):
-            draw_x = int(offset + (symbol_index * symbol_width))
-            draw_y = int((symbol_width / 2) + (y_symbol_index * symbol_width))
-            bg_img.paste(symbol_img, (draw_x, draw_y), symbol_img)
-
-        y_symbol_index += 1
-
     for i in range(magnitude):
-        continue
         spaces = spaces + 1
         if spaces > 4:
             spaces = 0

@@ -16,3 +16,16 @@
 * * Each limb has a story with it, or some attributes, some verbs and nouns to draw from
 * * We make a short phrase built from those limbs and the image chosen for each layer (BG too)
 
+
+## TO DO:
+* possibility of flipping left or right
+* * maybe it's random
+* arrange rows of symbols
+* Different Patterns:
+* * Arc (most normal)
+* * Double Arc (top and bottom enclosing in an almost-circle)
+* * Dueling Corners
+* Curate some LIMBS for the figure
+* * Every card gets (at least) one figure with a symbol for a head.
+* * a second figure with a DIFFERENT symbol can also appear
+* Print numbers somewhere
