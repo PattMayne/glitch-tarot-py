@@ -4,6 +4,7 @@ from PIL import Image
 import os
 import io
 import random
+from enum import Enum
 
 SYMBOL_DIVISOR = 6
 MAX_SYMBOLS = SYMBOL_DIVISOR - 1
@@ -44,9 +45,11 @@ def get_symbol():
     return Image.open(full_filename)
 
 
-#     I WANT TO USE THIS
-#   to get a list of rows and row lengths
+#  make a list of rows, where each row is represented
+#  by the number (magnitude) of symbols to print.
 #  and display the symbols with some elegance
+# @params{ magnitude int }
+# @return list[ int ]
 def get_row_sizes(magnitude):
     list_of_row_sizes = [];
 
@@ -74,6 +77,72 @@ def get_row_sizes(magnitude):
     return list_of_row_sizes
 
 
+# ALGORITHM for printing layers of arcs
+def print_symbols_arc(bg_img, symbol_img, magnitude):
+    print("doing arc")
+    symbol_width, symbol_height = symbol_img.size
+    y_symbol_index = 0
+    list_of_row_sizes = get_row_sizes(magnitude)
+
+    for symbols_in_this_row in list_of_row_sizes:
+        print(symbols_in_this_row)
+
+        offset = (SYMBOL_DIVISOR - symbols_in_this_row) * symbol_width / 2
+
+        for symbol_index in range(symbols_in_this_row):
+            draw_x = int(offset + (symbol_index * symbol_width))
+            draw_y = int((symbol_width / 2) + (y_symbol_index * (symbol_width + 10)))
+            # finally actually draw the image
+            bg_img.paste(symbol_img, (draw_x, draw_y), symbol_img)
+
+        y_symbol_index += 1
+
+
+
+# the ENUM for how many patterns we have
+class SymbolPatterns(Enum):
+    FLAT = 1
+    ARC = 2
+
+
+# Decide which printing algorithm to use
+def print_symbols(bg_img, symbol_img, magnitude):
+    symbol_pattern_option = random.randrange(0, len(SymbolPatterns))
+
+    pattern_enums = list(SymbolPatterns)
+    pattern_enum = pattern_enums[int(random.randrange(0, len(pattern_enums)))]
+
+
+    
+    if pattern_enum == SymbolPatterns.ARC:
+        print_symbols_arc(bg_img, symbol_img, magnitude)
+    elif pattern_enum == SymbolPatterns.FLAT:
+        print_symbols_flat(bg_img, symbol_img, magnitude)
+
+
+
+
+def print_symbols_flat(bg_img, symbol_img, magnitude):
+    print("doing flat")
+    symbol_width, symbol_height = symbol_img.size
+    y_symbol_index = 0
+    list_of_row_sizes = get_row_sizes(magnitude)
+
+    for symbols_in_this_row in list_of_row_sizes:
+        print(symbols_in_this_row)
+
+        offset = (SYMBOL_DIVISOR - symbols_in_this_row) * symbol_width / 2
+
+        for symbol_index in range(symbols_in_this_row):
+            draw_x = int(offset + (symbol_index * symbol_width))
+            draw_y = int((symbol_width / 2) + (y_symbol_index * (symbol_width + 10)))
+            # finally actually draw the image
+            bg_img.paste(symbol_img, (draw_x, draw_y), symbol_img)
+
+        y_symbol_index += 1
+
+
+
 
 def get_img():
     bg_img = get_bg() # Image.open("tarot_gen/img/bg_01.png")
@@ -89,34 +158,9 @@ def get_img():
     symbol_img = symbol_img.resize((symbol_width, symbol_width))
     print(magnitude)
 
-    draw_y = 25
-    spaces = 0
-    y_symbol_index = 0
+    print_symbols(bg_img, symbol_img, magnitude)
 
-    list_of_row_sizes = get_row_sizes(magnitude)
-
-    for symbols_in_this_row in list_of_row_sizes:
-        print(symbols_in_this_row)
-
-        offset = (SYMBOL_DIVISOR - symbols_in_this_row) * symbol_width / 2
-
-        for symbol_index in range(symbols_in_this_row):
-            draw_x = int(offset + (symbol_index * symbol_width))
-            draw_y = int((symbol_width / 2) + (y_symbol_index * symbol_width))
-            bg_img.paste(symbol_img, (draw_x, draw_y), symbol_img)
-
-        y_symbol_index += 1
-
-    for i in range(magnitude):
-        continue
-        spaces = spaces + 1
-        if spaces > 4:
-            spaces = 0
-            draw_y = draw_y + symbol_width
-        draw_x = 25 + (spaces * symbol_width)
-        bg_img.paste(symbol_img, (draw_x, draw_y), symbol_img)
-
-    # we can have multiple algorithms for how to display the symbols.
+ # we can have multiple algorithms for how to display the symbols.
 
     img_bytes = io.BytesIO() # THIS will be the image
     bg_img.save(img_bytes, format='PNG')
