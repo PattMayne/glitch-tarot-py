@@ -79,10 +79,10 @@ def get_row_sizes(magnitude):
 
 # @return int
 def get_distance_from_center(is_even, position, center):
-    if is_even:
-        position -= 1
-        center -= 1
-
+    if is_even and position > center:
+        #position -= 1
+        center += 1
+ 
     diff = position - center
     if diff < 0:
         diff *= -1
@@ -192,7 +192,7 @@ def get_img():
     # We have the bg and symbol. Now find the correct size for the symbol
     # must therefore find how many to draw
 
-    magnitude = random.randrange(1, 12)
+    magnitude = random.randrange(1, 14)
     img_size = bg_img.size
     bg_width, bg_height = img_size
     symbol_width = int(bg_width / SYMBOL_DIVISOR)
