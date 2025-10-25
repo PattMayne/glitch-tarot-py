@@ -155,8 +155,7 @@ def print_symbols(bg_img, symbol_img, magnitude):
     if pattern_enum == SymbolPatterns.ARC:
         print_symbols_arc(bg_img, symbol_img, magnitude)
     elif pattern_enum == SymbolPatterns.FLAT:
-        #print_symbols_flat(bg_img, symbol_img, magnitude)
-        print_symbols_arc(bg_img, symbol_img, magnitude)
+        print_symbols_flat(bg_img, symbol_img, magnitude)
 
 
 

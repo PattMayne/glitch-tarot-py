@@ -29,3 +29,15 @@
 * * Every card gets (at least) one figure with a symbol for a head.
 * * a second figure with a DIFFERENT symbol can also appear
 * Print numbers somewhere
+
+The **modular character** should be built like this:
+* HEADS are NOT symbols: **HEADS** are modern-archetypal
+* * TV-head-guy
+* * meme guys
+* BODIES are archetypal in other ways:
+* * fat guy
+* * skinny guy
+* * fashion
+* * robot body
+* * tree or something
+* then arms, legs, wheels, flippers
