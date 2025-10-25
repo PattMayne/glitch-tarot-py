@@ -87,11 +87,6 @@ def get_distance_from_center(is_even, position, center):
     if diff < 0:
         diff *= -1
 
-    print(" ")
-    print("DIFF:")
-    print(diff)
-    print(" ")
-
     return diff
 
 
@@ -106,8 +101,6 @@ def print_symbols_arc(bg_img, symbol_img, magnitude):
     # this row of symbols to print, where the "row" is a value 
     # which represents how many times to print symbol
     for symbols_in_this_row in list_of_row_sizes:
-        #print(symbols_in_this_row)
-
         # it must lower FIRST according to its distance from the center
         # but that must be ENHANCED by being lower in the rows
         # So START by getting the center - if it's even numbers, the first of the two center
@@ -118,20 +111,12 @@ def print_symbols_arc(bg_img, symbol_img, magnitude):
         is_even = symbols_in_this_row % 2 == 0
         quarter_symbol = int(symbol_width / 4)
 
-        is_string = " is even " if is_even else " is NOT even"
-        print("\nROW: center of ", symbols_in_this_row, " is ", center_index)
-        print(symbols_in_this_row, is_string)
-
         for symbol_index in range(symbols_in_this_row):
             distance_from_center = get_distance_from_center(is_even, symbol_index + 1, center_index + 1)
-            print(symbol_index, " is ", distance_from_center, " from ", center_index)
-            # get
             arcing_y_adjustment = distance_from_center * quarter_symbol
-                #0 if symbol_index == center_index || (is_even && symbol_index == center_index + 1) else
 
             draw_x = int(x_offset + (symbol_index * symbol_width))
             draw_y = int((symbol_width / 2) + (y_symbol_index * (symbol_width + 10))) + arcing_y_adjustment
-            print('arcing y:', arcing_y_adjustment)
             # finally actually draw the image
             bg_img.paste(symbol_img, (draw_x, draw_y), symbol_img)
 
@@ -160,25 +145,36 @@ def print_symbols(bg_img, symbol_img, magnitude):
 
 
 
-
 def print_symbols_flat(bg_img, symbol_img, magnitude):
     print("doing flat")
     symbol_width, symbol_height = symbol_img.size
     y_symbol_index = 0
     list_of_row_sizes = get_row_sizes(magnitude)
+    vertical_flip = False
+    header_space = int(symbol_width / 2)
+
+    grid_height = int((bg_img.size[1] - (header_space * 2)) / symbol_width)
+    if grid_height % 2 == 0:
+        grid_height += 1
 
     for symbols_in_this_row in list_of_row_sizes:
-        print(symbols_in_this_row)
+        #print(symbols_in_this_row)
 
         offset = (SYMBOL_DIVISOR - symbols_in_this_row) * symbol_width / 2
 
         for symbol_index in range(symbols_in_this_row):
             draw_x = int(offset + (symbol_index * symbol_width))
-            draw_y = int((symbol_width / 2) + (y_symbol_index * (symbol_width + 10)))
+            draw_y = int(header_space + (y_symbol_index * (symbol_width)))
+
+            if vertical_flip:
+                #draw_y = bg_img.size[1] - draw_y
+                draw_y = ((symbol_width * grid_height) - draw_y) - 1
+
             # finally actually draw the image
             bg_img.paste(symbol_img, (draw_x, draw_y), symbol_img)
 
         y_symbol_index += 1
+        vertical_flip = not vertical_flip
 
 
 
@@ -191,12 +187,11 @@ def get_img():
     # We have the bg and symbol. Now find the correct size for the symbol
     # must therefore find how many to draw
 
-    magnitude = random.randrange(1, 14)
+    magnitude = random.randrange(1, 25)
     img_size = bg_img.size
     bg_width, bg_height = img_size
     symbol_width = int(bg_width / SYMBOL_DIVISOR)
     symbol_img = symbol_img.resize((symbol_width, symbol_width))
-    print(magnitude)
 
     print_symbols(bg_img, symbol_img, magnitude)
 
