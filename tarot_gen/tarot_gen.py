@@ -5,6 +5,7 @@ import os
 import io
 import random
 from enum import Enum
+import tarot_gen.img.roster as roster
 
 SYMBOL_DIVISOR = 6
 MAX_SYMBOLS = SYMBOL_DIVISOR - 1
@@ -16,14 +17,11 @@ def say_hi(name):
 # TO DO: pick a what?
 
 def get_bg():
-    file_names = [
-            "bg_01.png",
-            "bg_02.png",
-            "bg_03.png",
-            "bg_04.png" ]
-    random_index = random.randrange(0, len(file_names))
+    bg_objects = roster.BG_LIST
+    
+    random_index = random.randrange(0, len(bg_objects))
     filename_prefix = "tarot_gen/img/"
-    full_filename = filename_prefix + file_names[random_index]
+    full_filename = filename_prefix + bg_objects[random_index].filename
     bg_img = Image.open(full_filename)
 
     return bg_img
@@ -33,15 +31,11 @@ def get_bg():
 # 
 
 def get_symbol():
-    file_names = [
-            "symbol_keyboard.png",
-            "symbol_pentacle.png",
-            "symbol_skull.png",
-            "symbol_gun.png",
-            "symbol_cup.png" ]
-    random_index = random.randrange(0, len(file_names))
+    symbol_objects = roster.SYMBOL_LIST
+
+    random_index = random.randrange(0, len(symbol_objects))
     filename_prefix = "tarot_gen/img/"
-    full_filename = filename_prefix + file_names[random_index]
+    full_filename = filename_prefix + symbol_objects[random_index].filename
     return Image.open(full_filename)
 
 
@@ -58,21 +52,12 @@ def get_row_sizes(magnitude):
         list_of_row_sizes.append(1)
         return list_of_row_sizes
 
-    # remove ONE from magnitude
-    # Because this one will be the BOTTOM row
-    # (it is solo and will eventually be part of a modular creature)
-
-    magnitude = magnitude - 1
-
     # always add the max number allowed
     unassigned_spaces = magnitude + 0
     while unassigned_spaces > 0:
         spaces_this_row = MAX_SYMBOLS if unassigned_spaces >= MAX_SYMBOLS else unassigned_spaces
         list_of_row_sizes.append(spaces_this_row)
         unassigned_spaces = unassigned_spaces - spaces_this_row
-
-    # adding that 1 back on
-    list_of_row_sizes.append(1)
 
     return list_of_row_sizes
 
@@ -144,7 +129,8 @@ def print_symbols(bg_img, symbol_img, magnitude):
 
 
 
-
+# Print the specified number of symbols on the given bg_image
+# there are multiple patterns / algorithms to randomly choose from
 def print_symbols_flat(bg_img, symbol_img, magnitude):
     print("doing flat")
     symbol_width, symbol_height = symbol_img.size
@@ -158,8 +144,6 @@ def print_symbols_flat(bg_img, symbol_img, magnitude):
         grid_height += 1
 
     for symbols_in_this_row in list_of_row_sizes:
-        #print(symbols_in_this_row)
-
         offset = (SYMBOL_DIVISOR - symbols_in_this_row) * symbol_width / 2
 
         for symbol_index in range(symbols_in_this_row):
@@ -167,7 +151,6 @@ def print_symbols_flat(bg_img, symbol_img, magnitude):
             draw_y = int(header_space + (y_symbol_index * (symbol_width)))
 
             if vertical_flip:
-                #draw_y = bg_img.size[1] - draw_y
                 draw_y = ((symbol_width * grid_height) - draw_y) - 1
 
             # finally actually draw the image
@@ -178,14 +161,22 @@ def print_symbols_flat(bg_img, symbol_img, magnitude):
 
 
 
+# @Flask Route Function
+# This is called from the router to get one image.
 # The main function to get an image
+# which therefore starts the chain of functions to generate
+# a modular tarot card
+#
 # @returns raw image bytes
 def get_img():
+
+    # First get bg and symbol
+
     bg_img = get_bg() # Image.open("tarot_gen/img/bg_01.png")
     symbol_img = get_symbol() # Image.open("tarot_gen/img/symbol_skull.png")
 
     # We have the bg and symbol. Now find the correct size for the symbol
-    # must therefore find how many to draw
+    # must therefore find how many (magnitude) symbols to draw
 
     magnitude = random.randrange(1, 25)
     img_size = bg_img.size
@@ -193,9 +184,9 @@ def get_img():
     symbol_width = int(bg_width / SYMBOL_DIVISOR)
     symbol_img = symbol_img.resize((symbol_width, symbol_width))
 
+    # We got all the data and elements we need. Print the symbols on the card.
+    # we have multiple algorithms for how to display the symbols.
     print_symbols(bg_img, symbol_img, magnitude)
-
- # we can have multiple algorithms for how to display the symbols.
 
     img_bytes = io.BytesIO() # THIS will be the image
     bg_img.save(img_bytes, format='PNG')

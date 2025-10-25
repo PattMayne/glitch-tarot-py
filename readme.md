@@ -41,3 +41,8 @@ The **modular character** should be built like this:
 * * robot body
 * * tree or something
 * then arms, legs, wheels, flippers
+
+## TO START:
+* enter the venv
+* Install the packages in requirements.txt
+*       flask --app app run
