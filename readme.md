@@ -15,6 +15,10 @@
 * * head is symbol, torso with x number legs, arms and legs.
 * * Each limb has a story with it, or some attributes, some verbs and nouns to draw from
 * * We make a short phrase built from those limbs and the image chosen for each layer (BG too)
+* **--NEW IDEA:**
+* Normal numbered cards always have a FACE and ONLY a face. BUT...
+* ... FACE cards actually have a whole MODULAR BODY
+* They're still in a setting (BG card) and maybe the number is zero
 
 
 ## TO DO:

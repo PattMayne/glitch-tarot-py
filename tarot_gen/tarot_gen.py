@@ -10,11 +10,11 @@ import tarot_gen.img.roster as roster
 SYMBOL_DIVISOR = 6
 MAX_SYMBOLS = SYMBOL_DIVISOR - 1
 
+
 def say_hi(name):
     return_string = "Hi, " + name + "!"
     return return_string
 
-# TO DO: pick a what?
 
 def get_bg():
     bg_objects = roster.BG_LIST
@@ -28,8 +28,6 @@ def get_bg():
 
 
 # SYMBOLS are like SUITS, or identities
-# 
-
 def get_symbol():
     symbol_objects = roster.SYMBOL_LIST
 
@@ -140,8 +138,6 @@ def print_symbols_flat(bg_img, symbol_img, magnitude):
     header_space = int(symbol_width / 2)
 
     grid_height = int((bg_img.size[1] - (header_space * 2)) / symbol_width)
-    if grid_height % 2 == 0:
-        grid_height += 1
 
     for symbols_in_this_row in list_of_row_sizes:
         offset = (SYMBOL_DIVISOR - symbols_in_this_row) * symbol_width / 2
@@ -156,7 +152,8 @@ def print_symbols_flat(bg_img, symbol_img, magnitude):
             # finally actually draw the image
             bg_img.paste(symbol_img, (draw_x, draw_y), symbol_img)
 
-        y_symbol_index += 1
+        if vertical_flip:
+            y_symbol_index += 1
         vertical_flip = not vertical_flip
 
 

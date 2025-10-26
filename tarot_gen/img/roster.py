@@ -67,6 +67,41 @@ BG_LIST = [
             "nouns": ["cathedral", "homage", "honor", "geometry"],
             "verbs": ["save", "pray", "worship", "create"]
         }
+    ),
+    BackgroundImage(
+        "bg_05.png",
+        {
+            "nouns": ["tower", "watcher", "warning", "beacon"],
+            "verbs": ["warn", "hearald", "watch", "illuminate"]
+        }
+    ),
+    BackgroundImage(
+        "bg_06.png",
+        {
+            "nouns": ["maze", "trap", "corridor", "cubicle", "backroom"],
+            "verbs": ["lose", "hide", "capture", "tangle", "confuse"]
+        }
+    ),
+    BackgroundImage(
+        "bg_07.png",
+        {
+            "nouns": ["trash", "filth", "wasteland", "underbelly"],
+            "verbs": ["decay", "discard", "reject"]
+        }
+    ),
+    BackgroundImage(
+        "bg_08.png",
+        {
+            "nouns": ["tree", "river", "forest", "life"],
+            "verbs": ["live", "frolick", "nurture"]
+        }
+    ),
+    BackgroundImage(
+        "bg_09.png",
+        {
+            "nouns": ["portal", "forest", "nightmare"],
+            "verbs": ["trick", "mesmerize", "radiate"]
+        }
     )
 ]
 
