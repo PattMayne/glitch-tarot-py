@@ -102,7 +102,7 @@ SYMBOL_LIST = [
         }
     ),
     SymbolImage(
-        "symbol_gun.png",
+        "symbol_cross.png",
         {
             "nouns": ["weapon", "hunter", "soldier", "killer", "battle"],
             "verbs": ["attack", "kill", "pursue", "destroy"]
@@ -129,4 +129,27 @@ SYMBOL_LIST = [
             "verbs": ["evolve", "create", "transcend", "consume"]
         }
     ),
+    SymbolImage(
+        "symbol_wrench.png",
+        {
+            "nouns": ["skull", "robot", "death", "space", "future"],
+            "verbs": ["evolve", "create", "transcend", "consume"]
+        }
+    ),
+        SymbolImage(
+        "symbol_gun.png",
+        {
+            "nouns": ["skull", "robot", "death", "space", "future"],
+            "verbs": ["evolve", "create", "transcend", "consume"]
+        }
+    ),
+    SymbolImage(
+        "symbol_germ.png",
+        {
+            "nouns": ["skull", "robot", "death", "space", "future"],
+            "verbs": ["evolve", "create", "transcend", "consume"]
+        }
+    )
+
+
 ]
