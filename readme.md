@@ -50,3 +50,14 @@ The **modular character** should be built like this:
 * enter the venv
 * Install the packages in requirements.txt
 *       flask --app app run
+
+
+## SELECT IMAGES:
+* **11 BACKGROUNDS**
+* * Mars up close
+* * Neptune
+* * sky turning to space (or the moon)
+* * Castle
+* * Mountain
+* * that image of titan? or venus?
+* * city fancy buildings

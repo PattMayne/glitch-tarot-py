@@ -55,20 +55,6 @@ BG_LIST = [
         }
     ),
     BackgroundImage(
-        "bg_03.png",
-        {
-            "nouns": ["vehicle", "metro", "compartment", "network", "surface"],
-            "verbs": ["streamline", "speed", "connect", "manifest"]
-        }
-    ),
-    BackgroundImage(
-        "bg_04.png",
-        {
-            "nouns": ["cathedral", "homage", "honor", "geometry"],
-            "verbs": ["save", "pray", "worship", "create"]
-        }
-    ),
-    BackgroundImage(
         "bg_05.png",
         {
             "nouns": ["tower", "watcher", "warning", "beacon"],
@@ -90,19 +76,20 @@ BG_LIST = [
         }
     ),
     BackgroundImage(
-        "bg_08.png",
-        {
-            "nouns": ["tree", "river", "forest", "life"],
-            "verbs": ["live", "frolick", "nurture"]
-        }
-    ),
-    BackgroundImage(
         "bg_09.png",
         {
             "nouns": ["portal", "forest", "nightmare"],
             "verbs": ["trick", "mesmerize", "radiate"]
         }
+    ),
+    BackgroundImage(
+        "bg_10.png",
+        {
+            "nouns": ["portal", "forest", "nightmare"],
+            "verbs": ["trick", "mesmerize", "radiate"]
+        }
     )
+
 ]
 
 
