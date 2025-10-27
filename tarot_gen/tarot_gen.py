@@ -192,9 +192,15 @@ def print_number_and_subject(bg_img, bottom_row_y, magnitude, symbol_width):
     full_filename = filename_prefix + "alte.ttf"
 
     font = ImageFont.truetype(full_filename, symbol_width)
-    bg_draw.text((int(symbol_width / 2), bottom_row_y), str(magnitude), font=font)
+    draw_x = int(symbol_width / 2)
+    draw_y = int(bottom_row_y + (symbol_width / 2))
+    bg_draw.text((draw_x, draw_y), str(magnitude), font=font)
 
     del bg_draw
+
+    draw_x = int(bg_width / 2) - symbol_width
+    subject_img = subject_img.resize((symbol_width * 2, symbol_width * 2))
+    bg_img.paste(subject_img, (draw_x, bottom_row_y), subject_img)
 
 
 
