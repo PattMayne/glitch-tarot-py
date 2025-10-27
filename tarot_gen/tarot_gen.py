@@ -24,6 +24,10 @@ def get_bg():
     full_filename = filename_prefix + bg_objects[random_index].filename
     bg_img = Image.open(full_filename)
 
+    chance_to_glitch = random.randint(0, 13)
+    if chance_to_glitch == 0:
+        bg_img = glitch_image(bg_img)
+
     return bg_img
 
 
@@ -136,8 +140,12 @@ def print_symbols_arc(bg_img, symbol_img, magnitude):
             draw_y = int((symbol_width / 2) + (y_symbol_index * (symbol_width + 10))) + arcing_y_adjustment
             bottom_row_y = draw_y + symbol_width
  
+            # glitch or not
+            glitch_this = random.randint(0, 15) == 0
+            img_to_draw = symbol_img if not glitch_this else glitch_image(symbol_img)
+            
             # finally actually draw the image
-            bg_img.paste(symbol_img, (draw_x, draw_y), symbol_img)
+            bg_img.paste(img_to_draw, (draw_x, draw_y), img_to_draw)
 
         y_symbol_index += 1
 
@@ -162,8 +170,8 @@ def print_symbols_flat(bg_img, symbol_img, magnitude):
     for symbols_in_this_row in list_of_row_sizes:
         offset = (SYMBOL_DIVISOR - symbols_in_this_row) * symbol_width / 2
 
-        for symbol_index in range(symbols_in_this_row):
-            draw_x = int(offset + (symbol_index * symbol_width))
+        for x_symbol_index in range(symbols_in_this_row):
+            draw_x = int(offset + (x_symbol_index * symbol_width))
             draw_y = int(header_space + (y_symbol_index * (symbol_width)))
 
             if vertical_flip:
@@ -171,8 +179,12 @@ def print_symbols_flat(bg_img, symbol_img, magnitude):
             else:
                 bottom_row_y = draw_y + symbol_width
 
+            # glitch or not
+            glitch_this = random.randint(0, 15) == 0
+            img_to_draw = symbol_img if not glitch_this else glitch_image(symbol_img)
+            
             # finally actually draw the image
-            bg_img.paste(symbol_img, (draw_x, draw_y), symbol_img)
+            bg_img.paste(img_to_draw, (draw_x, draw_y), img_to_draw)
 
         if vertical_flip:
             y_symbol_index += 1
@@ -240,4 +252,68 @@ def get_img():
     bg_img.save(img_bytes, format='PNG')
     img_bytes.seek(0) # reset stream position
     return img_bytes
+
+
+# GLITCH EFFECTS
+
+
+def glitch_image(og_img):
+    img = og_img.copy()
+
+    width, height = img.size
+    pixels = img.load() # for manipulating particular pixels
+    num_shifts = random.randint(3, 8)
+    max_shift = int(height / 3)
+    min_shift = int(height / 6)
+
+    random_selector = random.randint(0, 2)
+    shift_not_color = (random_selector == 0)
+
+    # Doing a SHIFT glitch
+    # will later add other glitches
+
+    for _ in range(num_shifts):
+        # Randomly choose a horizontal slice
+        y_start = random.randint(5, height - 5)
+        y_string = "y start: " + str(y_start)
+        print(y_string)
+        y_end = min(y_start + random.randint(min_shift, max_shift), height)
+        shift_amount = random.randint(0, width)
+        print(str(y_end))
+
+        # Crop the slice
+        box = (0, y_start, width, y_end)
+        slice_img = img.crop(box)
+
+        if shift_not_color:
+            #return slice_img
+            for y in range(y_start, y_end):
+                for x in range(0, width):
+                    pixels[x, y] = (0, 0, 0, 0)
+
+            img.paste(slice_img, (shift_amount, y_start), slice_img)
+            img.paste(slice_img, (shift_amount - width, y_start), slice_img)
+        else:
+            # changing color, not shift
+            color_shift = random.randint(50, 150)
+
+            for y in range(y_start, y_end):
+
+                for x in range(0, width):
+                    pixel_rgb = pixels[x, y]
+
+                    r = (pixel_rgb[0] + color_shift) % 255
+                    g = (pixel_rgb[1] + color_shift) % 255
+                    b = (pixel_rgb[2] + color_shift) % 255
+
+                    pixels[x, y] = (
+                        r,
+                        g,
+                        b,
+                        pixel_rgb[3]
+                    )
+        
+    # Save the glitched image
+    img.save("g.png")
+    return img
 
