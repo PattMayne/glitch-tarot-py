@@ -36,6 +36,11 @@ class Limb:
         self.joint = joint
 
 
+class Subject:
+    def __init__(self, filename, words):
+        self.filename = filename
+        self.words = words
+
 # THose are the classes.
 # Now to define the OBJECTS themselves.
 
@@ -151,5 +156,26 @@ SYMBOL_LIST = [
         }
     )
 
+
+]
+
+
+SUBJECT_LIST = [
+    Subject(
+        "subject_mulder.png",
+        {}
+    ),
+    Subject(
+        "subject_scullt.png",
+        {}
+    ),
+    Subject(
+        "subject_strung_out.png",
+        {}
+    ),
+    Subject(
+        "subject_wifejak.png",
+        {}
+    ),
 
 ]

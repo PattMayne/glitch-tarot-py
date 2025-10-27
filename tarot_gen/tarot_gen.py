@@ -73,13 +73,37 @@ def get_distance_from_center(is_even, position, center):
     return diff
 
 
+# the ENUM for how many patterns we have
+class SymbolPatterns(Enum):
+    FLAT = 1
+    ARC = 2
+
+
+# Decide which printing algorithm to use
+# @return int
+def print_symbols(bg_img, symbol_img, magnitude):
+    symbol_pattern_option = random.randrange(0, len(SymbolPatterns))
+
+    pattern_enums = list(SymbolPatterns)
+    pattern_enum = pattern_enums[int(random.randrange(0, len(pattern_enums)))]
+    
+    if pattern_enum == SymbolPatterns.ARC:
+        return print_symbols_arc(bg_img, symbol_img, magnitude)
+    elif pattern_enum == SymbolPatterns.FLAT:
+        return print_symbols_flat(bg_img, symbol_img, magnitude)
+
+
+
 # ALGORITHM for printing layers of arcs
+# @return int
 def print_symbols_arc(bg_img, symbol_img, magnitude):
     print("doing arc")
     symbol_width, symbol_height = symbol_img.size
     y_symbol_index = 0
     arcing_y_adjustment = 0
     list_of_row_sizes = get_row_sizes(magnitude)
+
+    bottom_row_y = 0
 
     # this row of symbols to print, where the "row" is a value 
     # which represents how many times to print symbol
@@ -100,30 +124,14 @@ def print_symbols_arc(bg_img, symbol_img, magnitude):
 
             draw_x = int(x_offset + (symbol_index * symbol_width))
             draw_y = int((symbol_width / 2) + (y_symbol_index * (symbol_width + 10))) + arcing_y_adjustment
+            bottom_row_y = draw_y + symbol_width
+ 
             # finally actually draw the image
             bg_img.paste(symbol_img, (draw_x, draw_y), symbol_img)
 
         y_symbol_index += 1
 
-
-
-# the ENUM for how many patterns we have
-class SymbolPatterns(Enum):
-    FLAT = 1
-    ARC = 2
-
-
-# Decide which printing algorithm to use
-def print_symbols(bg_img, symbol_img, magnitude):
-    symbol_pattern_option = random.randrange(0, len(SymbolPatterns))
-
-    pattern_enums = list(SymbolPatterns)
-    pattern_enum = pattern_enums[int(random.randrange(0, len(pattern_enums)))]
-    
-    if pattern_enum == SymbolPatterns.ARC:
-        print_symbols_arc(bg_img, symbol_img, magnitude)
-    elif pattern_enum == SymbolPatterns.FLAT:
-        print_symbols_flat(bg_img, symbol_img, magnitude)
+    return bottom_row_y
 
 
 
@@ -137,6 +145,8 @@ def print_symbols_flat(bg_img, symbol_img, magnitude):
     vertical_flip = False
     header_space = int(symbol_width / 2)
 
+    bottom_row_y = 0
+
     grid_height = int((bg_img.size[1] - (header_space * 2)) / symbol_width)
 
     for symbols_in_this_row in list_of_row_sizes:
@@ -148,6 +158,8 @@ def print_symbols_flat(bg_img, symbol_img, magnitude):
 
             if vertical_flip:
                 draw_y = ((symbol_width * grid_height) - draw_y) - 1
+            else:
+                bottom_row_y = draw_y + symbol_width
 
             # finally actually draw the image
             bg_img.paste(symbol_img, (draw_x, draw_y), symbol_img)
@@ -155,6 +167,7 @@ def print_symbols_flat(bg_img, symbol_img, magnitude):
         if vertical_flip:
             y_symbol_index += 1
         vertical_flip = not vertical_flip
+    return bottom_row_y
 
 
 
@@ -183,7 +196,9 @@ def get_img():
 
     # We got all the data and elements we need. Print the symbols on the card.
     # we have multiple algorithms for how to display the symbols.
-    print_symbols(bg_img, symbol_img, magnitude)
+    bottom_row_y = print_symbols(bg_img, symbol_img, magnitude)
+
+    print(bottom_row_y)
 
     img_bytes = io.BytesIO() # THIS will be the image
     bg_img.save(img_bytes, format='PNG')
