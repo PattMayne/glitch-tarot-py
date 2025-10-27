@@ -47,7 +47,14 @@ def get_subject():
     random_index = random.randrange(0, len(subject_objects))
     filename_prefix = "tarot_gen/img/"
     full_filename = filename_prefix + subject_objects[random_index].filename
-    return Image.open(full_filename)
+    subject_img = Image.open(full_filename)
+
+    # chance to glitch
+    chance_to_glitch = random.randint(0, 12)
+    if chance_to_glitch == 0:
+        subject_img = glitch_image(subject_img)
+    
+    return subject_img
 
    
 
@@ -58,11 +65,6 @@ def get_subject():
 # @return list[ int ]
 def get_row_sizes(magnitude):
     list_of_row_sizes = [];
-
-    # if the magnitude is small enough, we only need one row
-    if magnitude < 3:
-        list_of_row_sizes.append(1)
-        return list_of_row_sizes
 
     # always add the max number allowed
     unassigned_spaces = magnitude + 0
@@ -111,7 +113,6 @@ def print_symbols(bg_img, symbol_img, magnitude):
 # ALGORITHM for printing layers of arcs
 # @return int
 def print_symbols_arc(bg_img, symbol_img, magnitude):
-    print("doing arc")
     symbol_width, symbol_height = symbol_img.size
     y_symbol_index = 0
     arcing_y_adjustment = 0
@@ -156,7 +157,6 @@ def print_symbols_arc(bg_img, symbol_img, magnitude):
 # Print the specified number of symbols on the given bg_image
 # there are multiple patterns / algorithms to randomly choose from
 def print_symbols_flat(bg_img, symbol_img, magnitude):
-    print("doing flat")
     symbol_width, symbol_height = symbol_img.size
     y_symbol_index = 0
     list_of_row_sizes = get_row_sizes(magnitude)
@@ -275,11 +275,8 @@ def glitch_image(og_img):
     for _ in range(num_shifts):
         # Randomly choose a horizontal slice
         y_start = random.randint(5, height - 5)
-        y_string = "y start: " + str(y_start)
-        print(y_string)
         y_end = min(y_start + random.randint(min_shift, max_shift), height)
         shift_amount = random.randint(0, width)
-        print(str(y_end))
 
         # Crop the slice
         box = (0, y_start, width, y_end)
@@ -298,7 +295,6 @@ def glitch_image(og_img):
             color_shift = random.randint(50, 150)
 
             for y in range(y_start, y_end):
-
                 for x in range(0, width):
                     pixel_rgb = pixels[x, y]
 
@@ -312,8 +308,6 @@ def glitch_image(og_img):
                         b,
                         pixel_rgb[3]
                     )
-        
-    # Save the glitched image
-    img.save("g.png")
+                    
     return img
 
