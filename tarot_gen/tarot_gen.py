@@ -1,6 +1,6 @@
 # tarot_gen.py
 
-from PIL import Image
+from PIL import Image, ImageFont, ImageDraw
 import os
 import io
 import random
@@ -27,7 +27,7 @@ def get_bg():
     return bg_img
 
 
-# SYMBOLS are like SUITS, or identities
+# SYMBOLS are like SUITS
 def get_symbol():
     symbol_objects = roster.SYMBOL_LIST
 
@@ -36,6 +36,16 @@ def get_symbol():
     full_filename = filename_prefix + symbol_objects[random_index].filename
     return Image.open(full_filename)
 
+
+# SUBJECTS personify it all. Connect the SYMBOL (object) to the WORLD (bg)
+def get_subject():
+    subject_objects = roster.SUBJECT_LIST
+    random_index = random.randrange(0, len(subject_objects))
+    filename_prefix = "tarot_gen/img/"
+    full_filename = filename_prefix + subject_objects[random_index].filename
+    return Image.open(full_filename)
+
+   
 
 #  make a list of rows, where each row is represented
 #  by the number (magnitude) of symbols to print.
@@ -171,6 +181,24 @@ def print_symbols_flat(bg_img, symbol_img, magnitude):
 
 
 
+def print_number_and_subject(bg_img, bottom_row_y, magnitude, symbol_width):
+    # get subject
+    subject_img = get_subject()
+    bg_width, bg_height = bg_img.size
+
+    bg_draw = ImageDraw.Draw(bg_img)
+
+    filename_prefix = "tarot_gen/img/"
+    full_filename = filename_prefix + "alte.ttf"
+
+    font = ImageFont.truetype(full_filename, symbol_width)
+    bg_draw.text((int(symbol_width / 2), bottom_row_y), str(magnitude), font=font)
+
+    del bg_draw
+
+
+
+
 # @Flask Route Function
 # This is called from the router to get one image.
 # The main function to get an image
@@ -198,7 +226,9 @@ def get_img():
     # we have multiple algorithms for how to display the symbols.
     bottom_row_y = print_symbols(bg_img, symbol_img, magnitude)
 
-    print(bottom_row_y)
+    # bottom_row_y is where we can print the number and subject
+
+    print_number_and_subject(bg_img, bottom_row_y, magnitude, symbol_width)
 
     img_bytes = io.BytesIO() # THIS will be the image
     bg_img.save(img_bytes, format='PNG')

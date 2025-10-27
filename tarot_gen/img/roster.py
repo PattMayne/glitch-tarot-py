@@ -166,7 +166,7 @@ SUBJECT_LIST = [
         {}
     ),
     Subject(
-        "subject_scullt.png",
+        "subject_scully.png",
         {}
     ),
     Subject(
