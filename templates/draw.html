@@ -22,24 +22,33 @@
                     <div class="callout">
                         <div class="grid-x grid-padding-x">
                             <div class="large-12 cell">
-                                <p>You drew {{ number }} cards!</p>
+                                <p>You drew {{ number }} cards.</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                 <div class="large-12 cell">
-                    <div class="primary callout">
-                        <p>Here is a callout panel where the cards will b</p>
-                        {% for card64 in cards64 %}
+            </div>
+        </div>
 
-                            <img
-                                src="data:image/png;base64,{{ card64 }}"
-                                alt="Generated Tarot Image"
-                                class="tarot_img"
-                            >
 
-                        {% endfor %}
-                    </div>
+        <div id="card_board">
+            <h2>YOUR CARDS:</h2>
+            {% for card64 in cards64 %}
+
+                <img
+                    src="data:image/png;base64,{{ card64 }}"
+                    alt="Generated Tarot Image"
+                    class="tarot_img"
+                >
+
+            {% endfor %}
+        </div>
+
+
+        <div class="grid-container">
+            <div class="grid-x grid-padding-x"></div>
+                <div class="large-12 cell">
+                    {% include 'draw_form.html' %}
                 </div>
             </div>
 

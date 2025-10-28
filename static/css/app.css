@@ -1,10 +1,33 @@
 /* Custom Styles */
 
+
+/* fonts */
+
+@font-face{
+    font-family: alte-bold;
+    src: url('/static/fonts/alte-bold.ttf');
+    font-weight: bold;
+}
+
+@font-face{
+    font-family: alte;
+    src: url('/static/fonts/alte-reg.ttf');
+    font-weight: bold;
+}
+
+
+/* HTML elements override */
+
+
 body {
     background: #3B3030;
     color: #FFF0D1;
+    font-family: "alte";
 }
 
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'alte-bold';
+}
 
 
 /* overriding Foundation styles */
@@ -34,4 +57,12 @@ body {
 
 .tarot_img {
     height: 500px;
+}
+
+#card_board {
+    width: audo;
+    text-align: center;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
 }

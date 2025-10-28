@@ -1,0 +1,28 @@
+<div class="callout">
+    <div class="grid-x grid-padding-x">
+        <div class="large-12 cell">
+            <p>How many cards will you draw?</p>
+        </div>
+        <div class="large-6 cell">
+            
+            <form action="/draw" id="draw_cards_form" method="POST">
+                <select id="card_number_select" name="card_number_select">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                </select>
+            </form>
+
+        </div>
+        <div class="large-6 cell">
+            <a class="button" onclick="draw_cards()">DRAW CARDS</a>
+        </div>
+    </div>
+</div>

@@ -31,6 +31,13 @@ def get_img():
 def draw_cards():
     img_bytes = tgen.get_img()
     number_of_cards = int(request.form['card_number_select'])
+
+    # safety check
+    if number_of_cards > 10:
+        number_of_cards = 10
+    elif number_of_cards < 1:
+        number_of_cards = 1
+
     print("you drew")
     print(str(number_of_cards))
 
