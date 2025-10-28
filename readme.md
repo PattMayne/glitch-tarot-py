@@ -50,7 +50,8 @@ The **modular character** should be built like this:
 * enter the venv
 * Install the packages in requirements.txt
 *       flask --app app run
-
+* Flask and Ajax can create a responsive front-end.
+* * CSRF protection and sanitizing input
 
 ## SELECT IMAGES:
 * **11 BACKGROUNDS**
@@ -61,3 +62,6 @@ The **modular character** should be built like this:
 * * Mountain
 * * that image of titan? or venus?
 * * city fancy buildings
+
+
+

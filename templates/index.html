@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Glitch Tarot</title>
+        <!-- get the css here but the js at the end -->
+    </head>
+
+    <body>
+        <h1>GLITCH TAROT</h1>
+        <div id="one_tarot">
+            <p>That one tarot card will go here. Then I'll figure out how to do arbitrary numbers of them. And to use the templating system, ninja or jinja or something (it's jinja).
+              <img src="data:image/png;base64,{{ img64 }}" alt="Generated Image">
+        </div>
+        <div id="jinja_test">
+
+          {% if person %}
+            <h1>Hello {{ person }}!</h1>
+          {% else %}
+            <h1>Hello, World!</h1>
+          {% endif %}
+
+        </div>
+    </body>
+</html>

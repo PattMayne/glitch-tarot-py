@@ -6,6 +6,7 @@ import io
 import random
 from enum import Enum
 import tarot_gen.img.roster as roster
+import base64
 
 SYMBOL_DIVISOR = 6
 MAX_SYMBOLS = SYMBOL_DIVISOR - 1
@@ -56,7 +57,7 @@ def get_subject():
     
     return subject_img
 
-   
+
 
 #  make a list of rows, where each row is represented
 #  by the number (magnitude) of symbols to print.
@@ -308,6 +309,14 @@ def glitch_image(og_img):
                         b,
                         pixel_rgb[3]
                     )
-                    
+
     return img
 
+
+# To render raw onto the html page using jina template
+def get_tarot_base64():
+
+
+    # Encode as base64
+    img_base64 = base64.b64encode(get_img().getvalue()).decode('utf-8')
+    return img_base64
