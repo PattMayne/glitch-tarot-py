@@ -3,11 +3,9 @@
 # ELEMENTS OF EACH CARD
 ## NORMAL CARD:
 * Background (landscape / setting)
-* Symbol
-* Number
-* POSSIBLY some kind of figure? OR NOT.
-* It's possible that we should have to tell a story by the conjunction of symbol, number, and landscape
-* BUT we want some kind of IDENTITY, or SITUATION, or FOIBLE / PATHOS
+* Symbol (similar to Suit in normal cards)
+* Subject (person/persona/archetyp)
+* The Subject is situated between the Object (symbol) and the World (Background image)
 ## FACE CARD:
 * Background (landscape / setting)
 * LIMB-MONSTER (modular creature)
