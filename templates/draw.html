@@ -22,35 +22,23 @@
                     <div class="callout">
                         <div class="grid-x grid-padding-x">
                             <div class="large-12 cell">
-                                <p>How many cards will you draw?</p>
-                            </div>
-                            <div class="large-6 cell">
-                                
-                                <form action="/draw" id="draw_cards_form" method="POST">
-                                    <select id="card_number_select" name="card_number_select">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
-                                        <option>6</option>
-                                        <option>7</option>
-                                        <option>8</option>
-                                        <option>9</option>
-                                        <option>10</option>
-                                    </select>
-                                </form>
-     
-                            </div>
-                            <div class="large-6 cell">
-                              <a class="button" onclick="draw_cards()">DRAW CARDS</a>
+                                <p>You drew {{ number }} cards!</p>
                             </div>
                         </div>
                     </div>
                 </div>
                  <div class="large-12 cell">
                     <div class="primary callout">
-                        Here is a callout panel div 2
+                        <p>Here is a callout panel where the cards will b</p>
+                        {% for card64 in cards64 %}
+
+                            <img
+                                src="data:image/png;base64,{{ card64 }}"
+                                alt="Generated Tarot Image"
+                                class="tarot_img"
+                            >
+
+                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -61,6 +49,6 @@
         <script src="/static/js/vendor/what-input.js"></script>
         <script src="/static/js/vendor/foundation.js"></script>
         <script src="/static/js/app.js"></script>
-        <script src="/static/js/index.js"></script>
+        <script src="/static/js/draw.js"></script>
     </body>
 </html>

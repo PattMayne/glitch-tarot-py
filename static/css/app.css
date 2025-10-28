@@ -1,0 +1,37 @@
+/* Custom Styles */
+
+body {
+    background: #3B3030;
+    color: #FFF0D1;
+}
+
+
+
+/* overriding Foundation styles */
+
+.callout {
+    background: #664343;
+    color: #FFF0D1;
+}
+
+.callout.primary {
+    background: #795757;
+    color: #FFF0D1;
+}
+
+.button {
+    background: #111111;
+    color: #FFF0D1;
+}
+
+.button:hover {
+    background: #FFF0D1;
+    color: #222;
+}
+
+
+/* custom classes */ 
+
+.tarot_img {
+    height: 500px;
+}

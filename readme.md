@@ -22,17 +22,15 @@
 
 
 ## TO DO:
+* send meta-data for alt description
+* * name of symbol, BG, subject
+* * number of symbols. Numbers of glitches.
+* HTML template for "draw x cards" to mix in @ bottom of "draw" and top of "index"
 * possibility of flipping left or right
 * * maybe it's random
 * arrange rows of symbols
 * Different Patterns:
-* * Arc (most normal)
-* * Double Arc (top and bottom enclosing in an almost-circle)
 * * Dueling Corners
-* Curate some LIMBS for the figure
-* * Every card gets (at least) one figure with a symbol for a head.
-* * a second figure with a DIFFERENT symbol can also appear
-* Print numbers somewhere
 
 The **modular character** should be built like this:
 * HEADS are NOT symbols: **HEADS** are modern-archetypal

@@ -1,10 +1,13 @@
-from flask import Flask, send_file, render_template
+from flask import Flask, send_file, render_template, request
 import tarot_gen.tarot_gen as tgen
 import os
 import io
 import base64
 
-app = Flask(__name__, template_folder='templates')
+app = Flask(
+    __name__,
+    template_folder='templates',
+    static_folder='static')
 
 
 @app.route("/")
@@ -16,8 +19,25 @@ def hello_world():
     tarot_base64 = tgen.get_tarot_base64()
     return render_template("index.html", person=stringa, img64=tarot_base64)
 
+
 @app.route("/img")
 def get_img():
     img_bytes = tgen.get_img()
     return send_file(img_bytes, mimetype='image/png')
     #return "<h3>Getting IMG...</h3>"
+
+
+@app.post("/draw")
+def draw_cards():
+    img_bytes = tgen.get_img()
+    number_of_cards = int(request.form['card_number_select'])
+    print("you drew")
+    print(str(number_of_cards))
+
+    cards = []
+
+    for i in range(number_of_cards):
+        tarot_base64 = tgen.get_tarot_base64()
+        cards.append(tarot_base64)
+
+    return render_template("draw.html", number=number_of_cards, cards64=cards)
