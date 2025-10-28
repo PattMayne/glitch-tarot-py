@@ -257,8 +257,25 @@ def get_img():
 
 # GLITCH EFFECTS
 
+def split_glitch(img):
+    width, height = img.size
+    split_point_x = random.randint(10, width - 10)
+
+    bg = Image.new('RGBA', (width, height), (0, 0, 0, 0))
+    pixels = img.load() # for manipulating particular pixels
+    bg.paste(img, (split_point_x, 0), img)
+    bg.paste(img, (split_point_x - width, 0), img)
+    return bg
+
+
 
 def glitch_image(og_img):
+
+    # do a better selection method
+    # maybe we need a glitch module
+    if random.randint(0, 10) < 4:
+        return split_glitch(og_img)
+
     img = og_img.copy()
 
     width, height = img.size
