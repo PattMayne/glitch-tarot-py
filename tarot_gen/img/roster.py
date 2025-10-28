@@ -18,28 +18,32 @@ class Point:
         self.y = y
 
 class BackgroundImage:
-    def __init__(self, filename, words):
+    def __init__(self, filename, name, words):
         self.filename = filename
         self.words = words
+        self.name = name
 
 
 class SymbolImage:
-    def __init__(self, filename, words):
+    def __init__(self, filename, name, words):
         self.filename = filename
         self.words = words
+        self.name = name
 
 
 class Limb:
-    def __init__(self, filename, words, joint):
+    def __init__(self, filename, name, words, joint):
         self.filename = filename
         self.words = words
         self.joint = joint
+        self.name = name
 
 
 class Subject:
-    def __init__(self, filename, words):
+    def __init__(self, filename, name, words):
         self.filename = filename
         self.words = words
+        self.name = name
 
 # THose are the classes.
 # Now to define the OBJECTS themselves.
@@ -47,6 +51,7 @@ class Subject:
 BG_LIST = [
     BackgroundImage(
         "bg_01.png",
+        "Neptune",
         {
             "nouns": ["field", "tree", "sky", "wilderness"],
             "verbs": ["blow", "shine"]
@@ -54,41 +59,47 @@ BG_LIST = [
     ),
     BackgroundImage(
         "bg_02.png",
+        "Path to Epic Mountain",
         {
             "nouns": ["lightning", "magic", "mountain", "true path", "pilgrimmage"],
             "verbs": ["ascend", "triumph", "despair", "walk"]
         }
     ),
     BackgroundImage(
-        "bg_05.png",
+        "bg_03.png",
+        "Desert Highway",
         {
             "nouns": ["tower", "watcher", "warning", "beacon"],
             "verbs": ["warn", "hearald", "watch", "illuminate"]
         }
     ),
     BackgroundImage(
-        "bg_06.png",
+        "bg_04.png",
+        "Surreal Office Labyrinth",
         {
             "nouns": ["maze", "trap", "corridor", "cubicle", "backroom"],
             "verbs": ["lose", "hide", "capture", "tangle", "confuse"]
         }
     ),
     BackgroundImage(
-        "bg_07.png",
+        "bg_05.png",
+        "Picket Fence House",
         {
             "nouns": ["trash", "filth", "wasteland", "underbelly"],
             "verbs": ["decay", "discard", "reject"]
         }
     ),
     BackgroundImage(
-        "bg_09.png",
+        "bg_06.png",
+        "Television Growing in Bushes",
         {
             "nouns": ["portal", "forest", "nightmare"],
             "verbs": ["trick", "mesmerize", "radiate"]
         }
     ),
     BackgroundImage(
-        "bg_10.png",
+        "bg_07.png",
+        "Martian Desert",
         {
             "nouns": ["portal", "forest", "nightmare"],
             "verbs": ["trick", "mesmerize", "radiate"]
@@ -101,6 +112,7 @@ BG_LIST = [
 SYMBOL_LIST = [
     SymbolImage(
         "symbol_cup.png",
+        "Coffee Mug",
         {
             "nouns": ["vessel", "basin", "chalice", "cup", "crucible", "liquid"],
             "verbs": ["hold", "carry", "protect", "deliver", "cherish", "contain"]
@@ -108,6 +120,7 @@ SYMBOL_LIST = [
     ),
     SymbolImage(
         "symbol_cross.png",
+        "Old-style Bedazzled Crucifix",
         {
             "nouns": ["weapon", "hunter", "soldier", "killer", "battle"],
             "verbs": ["attack", "kill", "pursue", "destroy"]
@@ -115,6 +128,7 @@ SYMBOL_LIST = [
     ),
         SymbolImage(
         "symbol_keyboard.png",
+        "Numpad Keyboard",
         {
             "nouns": ["panel","interface", "instrument", "heart"],
             "verbs": ["play", "create", "calculate", "think", "express", "input"]
@@ -122,6 +136,7 @@ SYMBOL_LIST = [
     ),
         SymbolImage(
         "symbol_pentacle.png",
+        "Pentagram",
         {
             "nouns": ["altar", "pentacle", "devil"],
             "verbs": ["rejoice", "ravish", "ascend", "purchase"]
@@ -129,6 +144,7 @@ SYMBOL_LIST = [
     ),
         SymbolImage(
         "symbol_skull.png",
+        "Chrome Skull",
         {
             "nouns": ["skull", "robot", "death", "space", "future"],
             "verbs": ["evolve", "create", "transcend", "consume"]
@@ -136,6 +152,7 @@ SYMBOL_LIST = [
     ),
     SymbolImage(
         "symbol_wrench.png",
+        "Wrench",
         {
             "nouns": ["skull", "robot", "death", "space", "future"],
             "verbs": ["evolve", "create", "transcend", "consume"]
@@ -143,6 +160,7 @@ SYMBOL_LIST = [
     ),
         SymbolImage(
         "symbol_gun.png",
+        "Pistol",
         {
             "nouns": ["skull", "robot", "death", "space", "future"],
             "verbs": ["evolve", "create", "transcend", "consume"]
@@ -150,6 +168,7 @@ SYMBOL_LIST = [
     ),
     SymbolImage(
         "symbol_germ.png",
+        "Microbe",
         {
             "nouns": ["skull", "robot", "death", "space", "future"],
             "verbs": ["evolve", "create", "transcend", "consume"]
@@ -163,18 +182,22 @@ SYMBOL_LIST = [
 SUBJECT_LIST = [
     Subject(
         "subject_mulder.png",
+        "Fox 'Spooky' Mulder",
         {}
     ),
     Subject(
         "subject_scully.png",
+        "Dr. Dana Scully",
         {}
     ),
     Subject(
         "subject_strung_out.png",
+        "Strung-out Wojak",
         {}
     ),
     Subject(
         "subject_wifejak.png",
+        "Wifejak",
         {}
     ),
 

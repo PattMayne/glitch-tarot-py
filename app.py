@@ -22,14 +22,13 @@ def hello_world():
 
 @app.route("/img")
 def get_img():
-    img_bytes = tgen.get_img()
+    img_bytes = tgen.get_img()[0]
     return send_file(img_bytes, mimetype='image/png')
     #return "<h3>Getting IMG...</h3>"
 
 
 @app.post("/draw")
 def draw_cards():
-    img_bytes = tgen.get_img()
     number_of_cards = int(request.form['card_number_select'])
 
     # safety check
@@ -38,11 +37,9 @@ def draw_cards():
     elif number_of_cards < 1:
         number_of_cards = 1
 
-    print("you drew")
-    print(str(number_of_cards))
-
     cards = []
 
+    # These are all TUPLES (base64_img, alt_desc_text) that we're receiving
     for i in range(number_of_cards):
         tarot_base64 = tgen.get_tarot_base64()
         cards.append(tarot_base64)

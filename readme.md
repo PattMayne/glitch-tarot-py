@@ -29,6 +29,7 @@
 * arrange rows of symbols
 * Different Patterns:
 * * Dueling Corners
+* We have "among" and "below" but we also need "above" (which will be more rare)
 
 The **modular character** should be built like this:
 * HEADS are NOT symbols: **HEADS** are modern-archetypal

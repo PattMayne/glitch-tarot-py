@@ -36,8 +36,8 @@
             {% for card64 in cards64 %}
 
                 <img
-                    src="data:image/png;base64,{{ card64 }}"
-                    alt="Generated Tarot Image"
+                    src="data:image/png;base64,{{ card64[0] }}"
+                    alt="{{ card64[1] }}"
                     class="tarot_img"
                 >
 

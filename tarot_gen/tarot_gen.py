@@ -17,19 +17,26 @@ def say_hi(name):
     return return_string
 
 
+'''
+Get one background image
+@returns tuple (imagebytes, string, bool)
+'''
 def get_bg():
     bg_objects = roster.BG_LIST
     
     random_index = random.randrange(0, len(bg_objects))
     filename_prefix = "tarot_gen/img/"
     full_filename = filename_prefix + bg_objects[random_index].filename
+    bg_name = bg_objects[random_index].name
     bg_img = Image.open(full_filename)
 
     chance_to_glitch = random.randint(0, 13)
+    glitched = False
     if chance_to_glitch == 0:
         bg_img = glitch_image(bg_img)
+        glitched = True
 
-    return bg_img
+    return (bg_img, bg_name, glitched)
 
 
 # SYMBOLS are like SUITS
@@ -39,23 +46,28 @@ def get_symbol():
     random_index = random.randrange(0, len(symbol_objects))
     filename_prefix = "tarot_gen/img/"
     full_filename = filename_prefix + symbol_objects[random_index].filename
-    return Image.open(full_filename)
+    symbol_name = symbol_objects[random_index].name
+    return (Image.open(full_filename), symbol_name)
 
 
 # SUBJECTS personify it all. Connect the SYMBOL (object) to the WORLD (bg)
+# @returns tuple (img_bytes, string, bool)
 def get_subject():
     subject_objects = roster.SUBJECT_LIST
     random_index = random.randrange(0, len(subject_objects))
     filename_prefix = "tarot_gen/img/"
     full_filename = filename_prefix + subject_objects[random_index].filename
+    name = subject_objects[random_index].name
     subject_img = Image.open(full_filename)
 
     # chance to glitch
     chance_to_glitch = random.randint(0, 12)
+    glitched = False
     if chance_to_glitch == 0:
         subject_img = glitch_image(subject_img)
+        glitched = True
     
-    return subject_img
+    return (subject_img, name, glitched)
 
 
 
@@ -97,9 +109,8 @@ class SymbolPatterns(Enum):
 
 
 # Decide which printing algorithm to use
-# @return int
+# @return (int, int)
 def print_symbols(bg_img, symbol_img, magnitude):
-    symbol_pattern_option = random.randrange(0, len(SymbolPatterns))
 
     pattern_enums = list(SymbolPatterns)
     pattern_enum = pattern_enums[int(random.randrange(0, len(pattern_enums)))]
@@ -112,7 +123,7 @@ def print_symbols(bg_img, symbol_img, magnitude):
 
 
 # ALGORITHM for printing layers of arcs
-# @return int
+# @return (int, int)
 def print_symbols_arc(bg_img, symbol_img, magnitude):
     symbol_width, symbol_height = symbol_img.size
     y_symbol_index = 0
@@ -120,6 +131,7 @@ def print_symbols_arc(bg_img, symbol_img, magnitude):
     list_of_row_sizes = get_row_sizes(magnitude)
 
     bottom_row_y = 0
+    glitches = 0
 
     # this row of symbols to print, where the "row" is a value 
     # which represents how many times to print symbol
@@ -141,22 +153,26 @@ def print_symbols_arc(bg_img, symbol_img, magnitude):
             draw_x = int(x_offset + (symbol_index * symbol_width))
             draw_y = int((symbol_width / 2) + (y_symbol_index * (symbol_width + 10))) + arcing_y_adjustment
             bottom_row_y = draw_y + symbol_width
+
+            img_to_draw = symbol_img
  
-            # glitch or not
-            glitch_this = random.randint(0, 15) == 0
-            img_to_draw = symbol_img if not glitch_this else glitch_image(symbol_img)
+            # glitch or not 
+            if random.randint(0, 15) == 0:
+                img_to_draw = glitch_image(symbol_img)
+                glitches += 1
             
             # finally actually draw the image
             bg_img.paste(img_to_draw, (draw_x, draw_y), img_to_draw)
 
         y_symbol_index += 1
 
-    return bottom_row_y
+    return (bottom_row_y, glitches)
 
 
 
 # Print the specified number of symbols on the given bg_image
 # there are multiple patterns / algorithms to randomly choose from
+# @return (int, int)
 def print_symbols_flat(bg_img, symbol_img, magnitude):
     symbol_width, symbol_height = symbol_img.size
     y_symbol_index = 0
@@ -165,6 +181,7 @@ def print_symbols_flat(bg_img, symbol_img, magnitude):
     header_space = int(symbol_width / 2)
 
     bottom_row_y = 0
+    glitches = 0
 
     grid_height = int((bg_img.size[1] - (header_space * 2)) / symbol_width)
 
@@ -180,9 +197,12 @@ def print_symbols_flat(bg_img, symbol_img, magnitude):
             else:
                 bottom_row_y = draw_y + symbol_width
 
-            # glitch or not
-            glitch_this = random.randint(0, 15) == 0
-            img_to_draw = symbol_img if not glitch_this else glitch_image(symbol_img)
+            img_to_draw = symbol_img
+ 
+            # glitch or not 
+            if random.randint(0, 15) == 0:
+                img_to_draw = glitch_image(symbol_img)
+                glitches += 1
             
             # finally actually draw the image
             bg_img.paste(img_to_draw, (draw_x, draw_y), img_to_draw)
@@ -190,13 +210,16 @@ def print_symbols_flat(bg_img, symbol_img, magnitude):
         if vertical_flip:
             y_symbol_index += 1
         vertical_flip = not vertical_flip
-    return bottom_row_y
+
+    bottom_row_y += int(symbol_width / 4)
+
+    return (bottom_row_y, glitches)
 
 
 
 def print_number_and_subject(bg_img, bottom_row_y, magnitude, symbol_width):
     # get subject
-    subject_img = get_subject()
+    subject_img, subject_name, subject_glitched = get_subject()
     bg_width, bg_height = bg_img.size
 
     bg_draw = ImageDraw.Draw(bg_img)
@@ -215,22 +238,23 @@ def print_number_and_subject(bg_img, bottom_row_y, magnitude, symbol_width):
     subject_img = subject_img.resize((symbol_width * 2, symbol_width * 2))
     bg_img.paste(subject_img, (draw_x, bottom_row_y), subject_img)
 
+    return (subject_name, subject_glitched)
 
 
 
 # @Flask Route Function
 # This is called from the router to get one image.
-# The main function to get an image
+# ALL image requests come through here
 # which therefore starts the chain of functions to generate
 # a modular tarot card
 #
-# @returns raw image bytes
+# @returns tuple (imagebytes, alt_description_text)
 def get_img():
 
     # First get bg and symbol
 
-    bg_img = get_bg() # Image.open("tarot_gen/img/bg_01.png")
-    symbol_img = get_symbol() # Image.open("tarot_gen/img/symbol_skull.png")
+    bg_img, bg_name, bg_glitched = get_bg() # Image.open("tarot_gen/img/bg_01.png")
+    symbol_img, symbol_name = get_symbol() # Image.open("tarot_gen/img/symbol_skull.png")
 
     # We have the bg and symbol. Now find the correct size for the symbol
     # must therefore find how many (magnitude) symbols to draw
@@ -243,16 +267,36 @@ def get_img():
 
     # We got all the data and elements we need. Print the symbols on the card.
     # we have multiple algorithms for how to display the symbols.
-    bottom_row_y = print_symbols(bg_img, symbol_img, magnitude)
+    bottom_row_y, symbol_glitch_count = print_symbols(bg_img, symbol_img, magnitude)
 
     # bottom_row_y is where we can print the number and subject
 
-    print_number_and_subject(bg_img, bottom_row_y, magnitude, symbol_width)
+    subject_name, subject_glitched = print_number_and_subject(bg_img, bottom_row_y, magnitude, symbol_width)
 
     img_bytes = io.BytesIO() # THIS will be the image
     bg_img.save(img_bytes, format='PNG')
     img_bytes.seek(0) # reset stream position
-    return img_bytes
+
+    # build the alt description from names and glitch counts
+    alt_desc_string = subject_name
+
+    if subject_glitched:
+        alt_desc_string += " (glitched)"
+
+    alt_desc_string += " in " + bg_name
+
+    if bg_glitched:
+        alt_desc_string += " (glitched)"
+
+    alt_desc_string += " with " + str(magnitude) + " " + symbol_name
+
+    if magnitude > 1:
+        alt_desc_string += "s"
+    
+    if symbol_glitch_count > 0:
+        alt_desc_string += " (" + str(symbol_glitch_count) + " glitched)"
+
+    return (img_bytes, alt_desc_string)
 
 
 # GLITCH EFFECTS
@@ -331,9 +375,10 @@ def glitch_image(og_img):
 
 
 # To render raw onto the html page using jina template
+# This is what we will USUALLY use.
 def get_tarot_base64():
-
+    img_tuple = get_img()
 
     # Encode as base64
-    img_base64 = base64.b64encode(get_img().getvalue()).decode('utf-8')
-    return img_base64
+    img_base64 = base64.b64encode(img_tuple[0].getvalue()).decode('utf-8')
+    return (img_base64, img_tuple[1])
