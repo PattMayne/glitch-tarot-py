@@ -6,42 +6,22 @@
 * Symbol (similar to Suit in normal cards)
 * Subject (person/persona/archetyp)
 * The Subject is situated between the Object (symbol) and the World (Background image)
+
 ## FACE CARD:
-* Background (landscape / setting)
-* LIMB-MONSTER (modular creature)
-* Maybe every card has a randomly-generated CHARACTER:
-* * head is symbol, torso with x number legs, arms and legs.
-* * Each limb has a story with it, or some attributes, some verbs and nouns to draw from
-* * We make a short phrase built from those limbs and the image chosen for each layer (BG too)
-* **--NEW IDEA:**
-* Normal numbered cards always have a FACE and ONLY a face. BUT...
-* ... FACE cards actually have a whole MODULAR BODY
-* They're still in a setting (BG card) and maybe the number is zero
+* Probably NO face cards (until further deliberation)
 
 
 ## TO DO:
-* send meta-data for alt description
-* * name of symbol, BG, subject
-* * number of symbols. Numbers of glitches.
 * HTML template for "draw x cards" to mix in @ bottom of "draw" and top of "index"
 * possibility of flipping left or right
 * * maybe it's random
 * arrange rows of symbols
 * Different Patterns:
 * * Dueling Corners
-* We have "among" and "below" but we also need "above" (which will be more rare)
+* Flip cards by clicking
+* Remove 2nd div on index
+* Alt text on hover?
 
-The **modular character** should be built like this:
-* HEADS are NOT symbols: **HEADS** are modern-archetypal
-* * TV-head-guy
-* * meme guys
-* BODIES are archetypal in other ways:
-* * fat guy
-* * skinny guy
-* * fashion
-* * robot body
-* * tree or something
-* then arms, legs, wheels, flippers
 
 ## TO START:
 * enter the venv
