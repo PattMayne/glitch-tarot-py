@@ -10,6 +10,7 @@ app = Flask(
     static_folder='static')
 
 
+@app.get("/draw")
 @app.route("/")
 def hello_world():
     stringa = tgen.say_hi("Matt")
