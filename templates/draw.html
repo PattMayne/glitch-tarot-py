@@ -10,6 +10,9 @@
         <link rel="stylesheet" href="/static/css/app.css">
     </head>
     <body>
+
+        <div id="allow_reversals" data-value="{{ allow_reversals }}"></div>
+
         <div class="grid-container">
             <div class="grid-x grid-padding-x">
                 <div class="large-12 cell">
@@ -34,13 +37,16 @@
         <div id="card_board">
             <h2>YOUR CARDS:</h2>
             {% for card64 in cards64 %}
-
-                <img
-                    src="data:image/png;base64,{{ card64[0] }}"
-                    alt="{{ card64[1] }}"
-                    class="tarot_img"
-                >
-
+                <div class="tarot_img_container" id="container_{{ card64[2] }}">
+                    <img
+                        src="data:image/png;base64,{{ card64[0] }}"
+                        alt="{{ card64[1] }}"
+                        class="tarot_img"
+                        id="{{ card64[2] }}"
+                        style="rotate: 0deg;"
+                        onclick="rotate(this.id)"
+                    >
+                </div>
             {% endfor %}
         </div>
 

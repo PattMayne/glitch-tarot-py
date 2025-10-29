@@ -30,7 +30,8 @@ def get_img():
 @app.post("/draw")
 def draw_cards():
     number_of_cards = int(request.form['card_number_select'])
-
+    allow_reversals = request.form['reversals_select']
+   
     # safety check
     if number_of_cards > 10:
         number_of_cards = 10
@@ -41,7 +42,13 @@ def draw_cards():
 
     # These are all TUPLES (base64_img, alt_desc_text) that we're receiving
     for i in range(number_of_cards):
+        img_id = "img_" + str(i)
         tarot_base64 = tgen.get_tarot_base64()
-        cards.append(tarot_base64)
+        cards.append((tarot_base64[0], tarot_base64[1], img_id))
 
-    return render_template("draw.html", number=number_of_cards, cards64=cards)
+    return render_template(
+            "draw.html",
+            number=number_of_cards,
+            cards64=cards,
+            allow_reversals=allow_reversals
+        )
