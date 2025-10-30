@@ -7,10 +7,10 @@ The images never get saved to disk. If the user wants to keep them they must sav
 
 The web app has four main endpoints:
 
-* /             the main page which lets the use pick how many cards to draw and whether they can be randomly "reversed"
-* /img          delivers one PNG file to the client
-* /discord      (post) takes args for how many images, returns a ZIP file full of PNGs
-* /draw         (post) called by main page, takes args for # of imgs and if reversals allowed, returns HTML page with images embedded in the HTML (no links)
+* `/`             the main page which lets the use pick how many cards to draw and whether they can be randomly "reversed"
+* `/img`        delivers one PNG file to the client
+* `/discord`    (post) takes args for how many images, returns a ZIP file full of PNGs
+* `/draw`       (post) called by main page, takes args for # of imgs and if reversals allowed, returns HTML page with images embedded in the HTML (no links)
 
 
 ## ELEMENTS OF EACH CARD
