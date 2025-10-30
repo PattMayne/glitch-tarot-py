@@ -56,11 +56,13 @@ h1, h2, h3, h4, h5, h6 {
 /* custom classes */ 
 
 .tarot_img {
-    height: 500px;
+    max-height: 500px;
+    width: auto;
 }
 
 .tarot_img_container {
     display: inline-block;
+    max-width: 45vw;
 }
 
 #card_board {
