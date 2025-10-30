@@ -29,6 +29,7 @@ def get_bg():
     full_filename = filename_prefix + bg_objects[random_index].filename
     bg_name = bg_objects[random_index].name
     bg_img = Image.open(full_filename)
+    bg_img = bg_img.resize((600, 900))
 
     chance_to_glitch = random.randint(0, 13)
     glitched = False
