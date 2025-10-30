@@ -1,5 +1,45 @@
 # tarot_gen.py
 
+'''
+
+    This script loads the component-images,
+    pastes them onto the BG image,
+    optionally performs some glitching,
+    and returns the image.
+
+    The image (card) can be returns as a PNG
+    or as base64 data. PNG is when we need a file,
+    base64 is when we want to embed the image directly
+    into html (because there will be no saved file
+    to link to).
+
+    The functions that app.py might call are
+    get_tarot_base64   AND   get_img
+    Each delivers a single image.
+    To get multiple images app.py must call the function
+    multiple times.
+
+    Image components are:
+    - BG (background or world)
+    - symbol (object)
+    - subject (person or persona or perspective, psychological archetype or ccharacter)
+
+    BG is the base image. It is drawn once.
+    Symbol can be drawn multiple times, in a pattern, pasted on BG.
+    Subject is drawn once
+    A number is also drawn beside the subject, indicating the number of symbol-copies pasted
+    Any of these elements can be glitched, except the number.
+    Individual symbol-copies have a chance to be glitched or not-glitched.
+
+    REVERSALS:
+    There will be no card reversals in the image generation.
+    The HTML display gives the dealer the option to allow randomized reversals.
+    The discord bot is not likely to have reversals. But maybe we'll implement later.
+
+    Glitching is done by manipulating the pixels of the image objects.
+
+'''
+
 from PIL import Image, ImageFont, ImageDraw
 import os
 import io
@@ -51,7 +91,7 @@ def get_symbol():
     return (Image.open(full_filename), symbol_name)
 
 
-# SUBJECTS personify it all. Connect the SYMBOL (object) to the WORLD (bg)
+# SUBJECTS personify it all. Connects the SYMBOL (object) to the WORLD (bg)
 # @returns tuple (img_bytes, string, bool)
 def get_subject():
     subject_objects = roster.SUBJECT_LIST
@@ -142,7 +182,6 @@ def print_symbols_arc(bg_img, symbol_img, magnitude):
         # So START by getting the center - if it's even numbers, the first of the two center
         center_index = (symbols_in_this_row - int(symbols_in_this_row / 2)) - 1
 
-        #arcing_y_adjustment = int(arcing_y_adjustment + (y_symbol_index * (symbol_width / 4)) * 1.5)
         x_offset = (SYMBOL_DIVISOR - symbols_in_this_row) * symbol_width / 2
         is_even = symbols_in_this_row % 2 == 0
         quarter_symbol = int(symbol_width / 4)
@@ -217,7 +256,7 @@ def print_symbols_flat(bg_img, symbol_img, magnitude):
     return (bottom_row_y, glitches)
 
 
-
+# pastes the number (magnitude) of symbols drawn, alongside the subject image
 def print_number_and_subject(bg_img, bottom_row_y, magnitude, symbol_width):
     # get subject
     subject_img, subject_name, subject_glitched = get_subject()
@@ -241,63 +280,6 @@ def print_number_and_subject(bg_img, bottom_row_y, magnitude, symbol_width):
 
     return (subject_name, subject_glitched)
 
-
-
-# @Flask Route Function
-# This is called from the router to get one image.
-# ALL image requests come through here
-# which therefore starts the chain of functions to generate
-# a modular tarot card
-#
-# @returns tuple (imagebytes, alt_description_text)
-def get_img():
-
-    # First get bg and symbol
-
-    bg_img, bg_name, bg_glitched = get_bg() # Image.open("tarot_gen/img/bg_01.png")
-    symbol_img, symbol_name = get_symbol() # Image.open("tarot_gen/img/symbol_skull.png")
-
-    # We have the bg and symbol. Now find the correct size for the symbol
-    # must therefore find how many (magnitude) symbols to draw
-
-    magnitude = random.randrange(1, 25)
-    img_size = bg_img.size
-    bg_width, bg_height = img_size
-    symbol_width = int(bg_width / SYMBOL_DIVISOR)
-    symbol_img = symbol_img.resize((symbol_width, symbol_width))
-
-    # We got all the data and elements we need. Print the symbols on the card.
-    # we have multiple algorithms for how to display the symbols.
-    bottom_row_y, symbol_glitch_count = print_symbols(bg_img, symbol_img, magnitude)
-
-    # bottom_row_y is where we can print the number and subject
-
-    subject_name, subject_glitched = print_number_and_subject(bg_img, bottom_row_y, magnitude, symbol_width)
-
-    img_bytes = io.BytesIO() # THIS will be the image
-    bg_img.save(img_bytes, format='PNG')
-    img_bytes.seek(0) # reset stream position
-
-    # build the alt description from names and glitch counts
-    alt_desc_string = subject_name
-
-    if subject_glitched:
-        alt_desc_string += " (glitched)"
-
-    alt_desc_string += " in " + bg_name
-
-    if bg_glitched:
-        alt_desc_string += " (glitched)"
-
-    alt_desc_string += " with " + str(magnitude) + " " + symbol_name
-
-    if magnitude > 1:
-        alt_desc_string += "s"
-    
-    if symbol_glitch_count > 0:
-        alt_desc_string += " (" + str(symbol_glitch_count) + " glitched)"
-
-    return (img_bytes, alt_desc_string)
 
 
 # GLITCH EFFECTS
@@ -375,6 +357,11 @@ def glitch_image(og_img):
     return img
 
 
+
+#    FUNCTIONS FOR app.py
+
+
+
 # To render raw onto the html page using jina template
 # This is what we will USUALLY use.
 def get_tarot_base64():
@@ -383,3 +370,64 @@ def get_tarot_base64():
     # Encode as base64
     img_base64 = base64.b64encode(img_tuple[0].getvalue()).decode('utf-8')
     return (img_base64, img_tuple[1])
+
+
+'''
+    @Flask Route Function
+    This is called from the router to get one image.
+    ALL image requests come through here
+    which therefore starts the chain of functions to generate
+    a modular tarot card
+
+    @returns tuple (imagebytes, alt_description_text)
+'''
+def get_img():
+
+    # First get bg and symbol
+
+    bg_img, bg_name, bg_glitched = get_bg() # Image.open("tarot_gen/img/bg_01.png")
+    symbol_img, symbol_name = get_symbol() # Image.open("tarot_gen/img/symbol_skull.png")
+
+    # We have the bg and symbol. Now find the correct size for the symbol
+    # must therefore find how many (magnitude) symbols to draw
+
+    magnitude = random.randrange(1, 25)
+    img_size = bg_img.size
+    bg_width, bg_height = img_size
+    symbol_width = int(bg_width / SYMBOL_DIVISOR)
+    symbol_img = symbol_img.resize((symbol_width, symbol_width))
+
+    # We got all the data and elements we need. Print the symbols on the card.
+    # we have multiple algorithms for how to display the symbols.
+    bottom_row_y, symbol_glitch_count = print_symbols(bg_img, symbol_img, magnitude)
+
+    # bottom_row_y is where we can print the number and subject
+
+    subject_name, subject_glitched = print_number_and_subject(bg_img, bottom_row_y, magnitude, symbol_width)
+
+    img_bytes = io.BytesIO() # THIS will be the image
+    bg_img.save(img_bytes, format='PNG')
+    img_bytes.seek(0) # reset stream position
+
+    # build the alt description from names and glitch counts
+    alt_desc_string = subject_name
+
+    if subject_glitched:
+        alt_desc_string += " (glitched)"
+
+    alt_desc_string += " in " + bg_name
+
+    if bg_glitched:
+        alt_desc_string += " (glitched)"
+
+    alt_desc_string += " with " + str(magnitude) + " " + symbol_name
+
+    if magnitude > 1:
+        alt_desc_string += "s"
+    
+    if symbol_glitch_count > 0:
+        alt_desc_string += " (" + str(symbol_glitch_count) + " glitched)"
+
+    return (img_bytes, alt_desc_string)
+
+

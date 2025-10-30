@@ -58,33 +58,27 @@ def draw_cards():
 
 # package some images as PNGs in a zip file for the discord bot
 @app.post("/discord")
-@app.get("/discord")
 def discord_req():
-    number_of_cards = 3#int(request.form['card_number_select'])
+    number_of_cards = int(request.form['card_number_select'])
 
     if number_of_cards > 7:
         number_of_cards = 7
     elif number_of_cards < 1:
         number_of_cards = 1
 
-    cards = []
-
     # create in-memory bytes buffer
     zip_buffer = io.BytesIO()
 
-    # put this inside the zipfile code later! Don't do two loops.
-    for i in range(number_of_cards):
-        cards.append(tgen.get_img()[0])
-
-    
     # create a zip file object in write mode
     with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
-        for idx, img_bytes in enumerate(cards):
-            filename = f"image_{idx + 1}.png"
-            zip_file.writestr(filename, img_bytes.getvalue())
-
+        for i in range(number_of_cards):
+            img_bytes = tgen.get_img()[0]
+            zip_file.writestr(
+                    f"image_{i + 1}.png",
+                    img_bytes.getvalue()
+                )
+ 
     zip_buffer.seek(0)
-    #zip_bytes = zip_buffer.getvalue()
 
     return send_file(
             zip_buffer,
